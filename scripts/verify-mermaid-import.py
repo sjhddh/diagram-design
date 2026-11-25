@@ -1623,6 +1623,30 @@ def check_quadrant_chart(tmp: Path) -> None:
     }:
         fail(f"style or click keywords swallowed point names: {keyword_got!r}")
 
+    acc_prefix_points = tmp / "quadrant-acc-prefix-points.mmd"
+    acc_prefix_points.write_text(
+        "quadrantChart\n"
+        "accTitle: Phase: [beta]\n"
+        "accDescr : Spaced colon\n"
+        "Title of X: [0.9, 0.9]\n"
+        "AccTitle of X: [0.1, 0.2]\n"
+        "accTitles: [0.3, 0.4]\n"
+        "AccDescription: [0.5, 0.6]\n"
+        "accDescr notes: [0.7, 0.8]\n",
+        encoding="utf-8",
+    )
+    acc_prefix = json.loads(run_extract([str(acc_prefix_points), "--json"]))["diagrams"][0]
+    acc_prefix_got = {(item["label"], item["x"], item["y"]) for item in acc_prefix["points"]}
+    if acc_prefix_got != {
+        ("AccTitle of X", 0.1, 0.2),
+        ("accTitles", 0.3, 0.4),
+        ("AccDescription", 0.5, 0.6),
+        ("accDescr notes", 0.7, 0.8),
+    }:
+        fail(f"accTitle or accDescr prefixes swallowed point names: {acc_prefix_got!r}")
+    if acc_prefix["title"] != "of X: [0.9, 0.9]":
+        fail(f"title keyword no longer matches Mermaid: {acc_prefix['title']!r}")
+
     quoted_names = tmp / "quadrant-quoted-points.mmd"
     quoted_names.write_text(
         "quadrantChart\n"

@@ -1439,7 +1439,7 @@ def _unit_coordinate(raw: str, line_number: int) -> float:
     return value
 
 
-_QUADRANT_ACC = re.compile(r"^(?:accTitle|accDescr)\b", re.I)
+_QUADRANT_ACC = re.compile(r"^(?:accTitle\s*:|accDescr\s*[:{])", re.I)
 _QUADRANT_ACC_BLOCK = re.compile(r"^accDescr\b\s*\{[^}]*$", re.I)
 _QUADRANT_POINT_SEPARATOR = re.compile(r":\s*\[")
 _QUADRANT_CLASS_SUFFIX = re.compile(r":::[^\s:]+$")
